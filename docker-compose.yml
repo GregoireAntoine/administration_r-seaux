@@ -23,17 +23,7 @@ services:
     networks: 
       internal-servers: 
         ipv4_address: "172.18.1.5"
-  #ERP-internal:
-  db-internal: 
-    image: "mariadb"
-    environment:
-      MARIADB_RANDOM_ROOT_PASSWORD: "true"
-      MARIADB_USER: 'admin'
-      MARIADB_PASSWORD: 'admin'
-      MARIADB_DATABASE: 'woodtoys_db'
-    networks: 
-      internal-servers: 
-        ipv4_address: "172.18.1.4"
+  
     
   pc-direction:
     image: "ubuntu"
