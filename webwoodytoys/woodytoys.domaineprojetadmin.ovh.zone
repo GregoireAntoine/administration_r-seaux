@@ -1,0 +1,17 @@
+$ORIGIN woodytoys.domaineprojetadmin.ovh.
+$TTL	3600
+woodytoys.domaineprojetadmin.ovh.	IN	SOA	ns.woodytoys.domaineprojetadmin.ovh. root.woodytoys.domaineprojetadmin.ovh. (
+			2
+			3600
+			600
+			86400
+			600 )
+
+
+
+@    IN      NS      ns.woodytoys.domaineprojetadmin.ovh.
+
+
+ns			IN	A	176.96.231.219;
+www			IN	A	176.96.231.219;
+b2b			IN	A	176.96.231.219;
