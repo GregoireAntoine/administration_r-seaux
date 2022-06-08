@@ -1,0 +1,18 @@
+$ORIGIN woodytoys.internal.
+$TTL	3600
+@	IN	SOA	ns.woodytoys.internal. root.woodytoys.internal. (
+			2
+			3600
+			600
+			86400
+			600 )
+
+
+
+			IN      NS      ns.woodytoys.internal.
+
+
+
+
+ns			IN	A	172.18.1.4;
+b2b.woodytoys.internal.	IN	A	172.18.1.3
