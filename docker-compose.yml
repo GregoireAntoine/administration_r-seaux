@@ -1,43 +1,82 @@
-version: "3.9"
+version: "3.3"
 services:
-  
+  dns-dmz:
+    image: "internetsystemsconsortium/bind9:9.16"
+    hostname: "dns"
+    domainname: "woodytoys.domaineprojetadmin.ovh"
+    volumes:
+      - "./dns/public/named.conf:/etc/bind/named.conf"
+      - "./dns/public/zones/:/etc/bind/zones/"
+      - "./dns/public/named.conf.local:/etc/bind/named.conf.local"
+      - "./dns/public/named.conf.options:/etc/bind/named.conf.options"
+    ports:
+      - "53:53"
+      - "53:53/udp"
+    networks:
+      dmz:
+        ipv4_address: "172.18.3.2"
+
+  web-dmz:
+    image: "admin/php:7.2"
+    build: "./web"
+    hostname: "web"
+    domainname: "woodytoys.domaineprojetadmin.ovh"
+    volumes:
+      - "./web/www/:/var/www/woodtoys.com/"
+    ports:
+      - "80:80"
+    networks:
+      dmz:
+        ipv4_address: "172.18.3.4"
+      internal-servers:
+
   dns-internal:
     image: "internetsystemsconsortium/bind9:9.16"
     hostname: "dns"
     domainname: "woodytoys.internal"
-    volumes: 
+    volumes:
       - "./dns/internal/named.conf:/etc/bind/named.conf"
       - "./dns/internal/zones/:/etc/bind/zones/"
       - "./dns/internal/named.conf.local:/etc/bind/named.conf.local"
       - "./dns/internal/named.conf.options:/etc/bind/named.conf.options"
-    networks: 
-      internal-servers: 
+    networks:
+      internal-servers:
         ipv4_address: "172.18.1.3"
   resolver-internal:
     image: "internetsystemsconsortium/bind9:9.16"
-    volumes: 
+    volumes:
       - "./dns/resolver/named.conf:/etc/bind/named.conf"
       - "./dns/resolver/named.conf.default_zones:/etc/bind/named.conf.default_zones"
       - "./dns/resolver/named.conf.local:/etc/bind/named.conf.local"
       - "./dns/resolver/named.conf.options:/etc/bind/named.conf.options"
-    networks: 
-      internal-servers: 
+    networks:
+      internal-servers:
         ipv4_address: "172.18.1.5"
-  
-    
+  #ERP-internal:
+  db-internal:
+    image: "mariadb"
+    environment:
+      MARIADB_RANDOM_ROOT_PASSWORD: "true"
+      MARIADB_USER: 'admin'
+      MARIADB_PASSWORD: 'admin'
+      MARIADB_DATABASE: 'woodtoys_db'
+    networks:
+      internal-servers:
+        ipv4_address: "172.18.1.4"
+
   pc-direction:
     image: "ubuntu"
     dns: "172.18.1.5"
-    networks: 
-      internal-computers: 
+    networks:
+      internal-computers:
         ipv4_address: "192.168.0.2"
       internal-servers:
       dmz:
   pc-secretariat:
     image: "ubuntu"
     dns: "172.18.1.5"
-    networks: 
-      internal-computers: 
+    networks:
+      internal-computers:
         ipv4_address: "192.168.0.3"
       internal-servers:
       dmz:
@@ -52,5 +91,3 @@ networks:
         - subnet: "172.18.1.0/24"
   internal-computers:
     ipam:
-      config:
-        - subnet: "192.168.0.0/16"
